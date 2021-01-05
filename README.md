@@ -1,5 +1,4 @@
 # Nuremberg Bouldering Map
-#### Video Demo:  https://youtu.be/00H4BfG4gJI
 #### Description:
 My project is an interactive map of Nuremberg and the surrounding area where users are able to create markers where they find spots for climbing, mostly bouldering.
 Users are able to create an account and log in to the Website.
