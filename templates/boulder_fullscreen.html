@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Boulder Description
+{% endblock %}
+
+{% block main %}
+    <p class="h1">
+        {{ boulder["name"] }}, {{ boulder["grade"] }}
+    </p>
+    <form action="/show_boulder" method="post">
+        <div>
+            <button class="btn btn-primary" type="submit" name="show_boulder">Show boulder on map</button>
+            <input type="hidden" id="name" name="name" value="">
+        </div>
+    </form>
+    <script>
+        document.getElementById("name").value = '{{ boulder["name"] }}';
+    </script>
+    <p>
+
+    </p>
+    <div>
+        <img src='{{ boulder["image"] }}' class="img-fluid" alt='Picture of the Boulder: {{ boulder["name"] }}'>
+    </div>
+    <p class="lead">
+      {{ boulder["description"] }}
+    </p>
+{% endblock %}

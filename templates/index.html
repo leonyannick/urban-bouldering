@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Overview
+{% endblock %}
+
+{% block main %}
+   <div id="mapid" class="w-100 p-3"></div>
+
+   <script>
+       var mymap = L.map('mapid').setView([49.4499803659109, 11.076768964711437], 12);
+       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoibGVvbnlhbm5pY2siLCJhIjoiY2tqN2YyYXhhNmlxeDJ2cWozaTg5Nmh0bCJ9.HnezSOjWLoQOisM45UF32w'
+        }).addTo(mymap);
+
+
+        var popup = L.popup()
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent('<form action="/" method="post" enctype=multipart/form-data> <div class="form-group"> <input autofocus class="form-control" name="name" placeholder="Name" type="text"> </div> <div class="form-group"> <div class="form-group"> <select class="form-control" name="grade"> <option disabled="" selected="" value="">Grade</option> <option value="6a">6a</option> <option value="6a+">6a+</option> <option value="6b">6b</option> <option value="6b+">6b+</option> <option value="6c">6c</option> <option value="6c+">6c+</option> <option value="7a">7a</option> <option value="7a+">7a+</option> <option value="7b">7b</option> <option value="7b+">7b+</option> <option value="7c">7c</option> <option value="7c+">7c+</option> <option value="8a">8a</option> <option value="8a+">8a+</option> <option value="8b">8b</option> <option value="8b+">8b+</option> <option value="8c">8c</option> <option value="8c+">8c+</option> </select> </div> <div class="form-group"> <input class="form-control" name="description" placeholder="Description" type="text"> </div> <div class="form-group"> <input type="file" name="file" class="form-control-file"> </div> <div class="form-group"> <button class="btn btn-primary" type="submit">Submit</button> </div> <input type="hidden" id="latitude" name="latitude" value=""> <input type="hidden" id="longitude" name="longitude" value=""> </form>')
+                .openOn(mymap);
+            document.getElementById("latitude").value = e.latlng.lat;
+            document.getElementById("longitude").value = e.latlng.lng;
+        }
+        mymap.on('click', onMapClick);
+
+        //geolocation
+        map.locate({setView: true, maxZoom: 16});
+
+        function onLocationFound(e) {
+            var radius = e.accuracy;
+
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        map.on('locationfound', onLocationFound);
+
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        map.on('locationerror', onLocationError);
+
+        //upload images
+        /*
+        window.addEventListener('load', function() {
+            document.querySelector('input[type="file"]').addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    var img = document.querySelector('img');  // $('img')[0]
+                    img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+                    img.onload = imageIsLoaded;
+                }
+            });
+        });
+
+        function imageIsLoaded() {
+            alert(this.src);  // blob url
+            // update width and height ...
+        }
+        */
+   </script>
+
+   {% for boulder in boulders %}
+       <script>
+           var name = '<a href="/{{ boulder["name"] }}" target="_blank">{{ boulder["name"] }}</a>';
+           var grade = '{{ boulder["grade"] }}';
+           var latitude = '{{ boulder["latitude"] }}';
+           var longitude = '{{ boulder["longitude"] }}';
+
+           var latlng = L.latLng(latitude, longitude);
+
+           var marker = L.marker(latlng).addTo(mymap);
+           var txt = name + ", "+ grade;
+           var img = '<img src="{{ boulder["image"] }}" class="img-fluid" alt="Picture of the Boulder: {{ boulder["name"] }}">';
+           marker.bindPopup(txt + img).openPopup();
+
+
+       </script>
+   {% endfor %}
+
+
+
+
+{% endblock %}
