@@ -1,4 +1,5 @@
 # Nuremberg Bouldering Map
+## Final project for Harvards course [CS50: Introduction to Computer Science](https://pll.harvard.edu/course/cs50-introduction-computer-science)
 #### Description:
 My project is an interactive map of Nuremberg and the surrounding area where users are able to create markers where they find spots for climbing, mostly bouldering.
 Users are able to create an account and log in to the Website.
